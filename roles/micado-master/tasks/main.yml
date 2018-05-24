@@ -4,6 +4,11 @@
 
 # TODO: Configure hostname here
 
+- name: Load the credentials and security settings from the playbook
+  include_vars:
+    file: "credentials.yml"
+    name: config
+
 - name: 'Installing packages'
   apt:
     pkg: "{{ item }}"
