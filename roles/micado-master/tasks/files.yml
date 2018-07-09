@@ -150,3 +150,8 @@
     src: docker/docker-compose.yml.j2
     dest: /var/lib/micado/docker-compose.yml
     mode: 0644
+- name: "mictl: copy file"
+  copy:
+    src: misc/mictl
+    dest: /usr/local/bin/mictl
+    mode: 0755

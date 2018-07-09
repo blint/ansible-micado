@@ -23,6 +23,14 @@
     - jq 
     - dnsmasq
 
+- name: 'Installing mictl dependencies'
+  pip:
+    name:
+      - requests
+      - click
+      - terminaltables
+    state: present
+
 # FIXME: Why do we need this?
 - name: 'Create Prometheus user'
   user:
