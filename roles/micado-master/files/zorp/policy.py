@@ -44,7 +44,6 @@ EncryptionPolicy(
     )
 )
 
-
 class MicadoCredmanAuthenticationBackend(AbstractAuthenticationBackend):
     def __init__(self, url):
         self.url = url
@@ -115,7 +114,6 @@ class MicadoCredmanAuthenticationBackend(AbstractAuthenticationBackend):
                 (code, j_body.get('result', ''), )
                 )
             return Z_AUTH_ACCEPT
-
 
 class HtpasswdAuthenticationBackend(AbstractAuthenticationBackend):
     def __init__(self, filename):
@@ -307,8 +305,10 @@ class FormAuthParseLoginProxy(AnyPyProxy):
         if not formdata.has_key("username") or not formdata.has_key("password") or not formdata.has_key("redirect_location"):
             raise ValueError, "Invalid form parameters supplied; formdata='%s'" % formdata
         redirect_location = urllib.unquote(formdata["redirect_location"][0])
+        username = urllib.unquote(formdata["username"][0])
+        password = urllib.unquote(formdata["password"][0])
         proxyLog(self, HTTP_POLICY, 1, "Redirect location; loc='%s'", (redirect_location,))
-        return (formdata["username"][0], formdata["password"][0], redirect_location)
+        return (username, password, redirect_location)
 
     def setUnauthorizedVerdict(self, redirect_location):
         self.session.http.error_status = 301
