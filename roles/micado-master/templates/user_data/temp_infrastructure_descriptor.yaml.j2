@@ -10,4 +10,4 @@ nodes:
     max: 1
 
 variables:
-  master_host_ip: {{ ansible_host }}
+  master_host_ip: {{ ansible_default_ipv4.address }}

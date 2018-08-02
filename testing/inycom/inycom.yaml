@@ -8,10 +8,11 @@ repositories:
 
 topology_template:
   node_templates:
-    stressng:
+    magician:
       type: tosca.nodes.MiCADO.Container.Application.Docker
       properties:
-         command: "--cpu 0 --cpu-method pi -l 85"
+         ports:
+           - "8088:8080"
          deploy:
            resources:
              reservations:
@@ -19,7 +20,15 @@ topology_template:
       artifacts:
        image:
          type: tosca.artifacts.Deployment.Image.Container.Docker
-         file: lorel/docker-stress-ng
+         file: inycomcolaproject/magicianic:magician
+         repository: docker_hub
+
+    classifier:
+      type: tosca.nodes.MiCADO.Container.Application.Docker
+      artifacts:
+       image:
+         type: tosca.artifacts.Deployment.Image.Container.Docker
+         file: inycomcolaproject/magicianic:magicianclassifier
          repository: docker_hub
 
     worker_node:
@@ -32,9 +41,9 @@ topology_template:
         host:
           properties:
             num_cpus: 2000
-            mem_size: 1073741824
+            mem_size: 4294967296
             vnc_password: secret
-            libdrive_id: 87ce928e-e0bc-4cab-9502-514e523783e3
+            libdrive_id: 390d52b5-4a2c-48ca-af7a-341a051dd09e
             public_key_id: ADD_YOUR_ID_HERE
             firewall_policy: ADD_YOUR_ID_HERE
 
@@ -54,7 +63,7 @@ topology_template:
             expr: '(100-(avg(rate(node_cpu{group="worker_cluster",mode="idle"}[60s]))*100)) < {{NODE_TH_MIN}}'
             for: 1m
           min_instances: 1
-          max_instances: 3
+          max_instances: 4
           scaling_rule: |
             if len(m_nodes) <= m_node_count and m_time_since_node_count_changed > 60:
               if node_overloaded:
@@ -65,11 +74,11 @@ topology_template:
               print('Transient phase, skipping update of nodes...')
     - scalability:
         type: tosca.policies.Scaling.MiCADO
-        targets: [ stressng ]
+        targets: [ magician ]
         properties:
           constants:
-            SERVICE_NAME: 'stressng'
-            SERVICE_FULL_NAME: '{{stack}}_stressng'
+            SERVICE_NAME: 'magician'
+            SERVICE_FULL_NAME: '{{stack}}_magician'
             SERVICE_TH_MAX: '60'
             SERVICE_TH_MIN: '20'
           alerts:
