@@ -1,0 +1,82 @@
+version: '3.3'
+
+services:
+
+   dashboard:
+     image: micado/dashboard:0.2.0
+     container_name: micado-dashboard
+     restart: always
+     environment:
+      MICADO_FRONTEND_IP: 127.0.0.1
+
+   prometheus:
+    image: balasys/zorpgpl
+    container_name: prometheus
+    restart: always
+    ports:
+      - 9090:80
+    volumes:
+      - "./policy.py:/etc/zorp/policy.py"
+
+   alertmanager:
+    image: balasys/zorpgpl
+    container_name: alertmanager
+    restart: always
+    depends_on:
+      - prometheus
+    ports:
+      - 9093:80
+    volumes:
+      - "./policy.py:/etc/zorp/policy.py"
+
+   dockervisualizer:
+    image: balasys/zorpgpl
+    container_name: dockervisualizer
+    restart: always
+    volumes:
+      - "./policy.py:/etc/zorp/policy.py"
+
+   grafana:
+    image: balasys/zorpgpl
+    container_name: grafana
+    restart: always
+    depends_on:
+      - prometheus
+    volumes:
+      - "./policy.py:/etc/zorp/policy.py"
+
+   toscasubmitter:
+    image: balasys/zorpgpl
+    container_name: toscasubmitter
+    restart: always
+    ports:
+      - 5050:80
+    volumes:
+      - "./policy.py:/etc/zorp/policy.py"
+
+   credman:
+    image: micado/credential-manager:latest
+    container_name: credman
+    restart: always
+    environment:
+      PROVISION_FILE: /config/provisioning.csv
+      DATABASE_URL: sqlite:////config/credential.db
+    volumes:
+      - "./provisioning.csv:/config/provisioning.csv"
+
+   zorp:
+    image: balasys/zorpgpl:latest
+    container_name: zorp
+    restart: always
+    depends_on:
+      - alertmanager
+      - prometheus
+      - grafana
+      - dockervisualizer
+      - credman
+    ports:
+      - 443:443
+    volumes:
+      - "../../roles/micado-master/files/zorp/:/etc/zorp/"
+      - "../../roles/micado-master/files/zorp/zorp-entrypoint.sh:/app/docker-entrypoint.sh"
+      - "./user_data_zorp.env:/etc/zorp/user_data_zorp.env"
