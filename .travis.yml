@@ -1,0 +1,18 @@
+---
+sudo: required
+
+before_install:
+  - docker-compose --version
+  - docker-compose -f testing/travis/docker-compose.yml pull
+  - docker-compose -f testing/travis/docker-compose.yml up -d
+  - docker ps
+  - docker-compose -f testing/travis/docker-compose.yml logs
+  - curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -o wait-for-it.sh
+  - chmod +x wait-for-it.sh
+  - ./wait-for-it.sh 127.0.0.1:443
+  - curl --insecure https://admin:password@127.0.0.1/docker-visualizer
+  - curl --insecure https://127.0.0.1/docker-visualizer
+
+after_failure:
+  - docker-compose -f testing/travis/docker-compose.yml logs
+
