@@ -12,7 +12,7 @@ jobs:
       - run: sudo apt-add-repository -y ppa:ansible/ansible
       - run: sudo apt-get update -qq
       - run: sudo apt-get install -y ansible
-      - run: ansible-playbook -i sample_hosts micado-master.yml --syntax-check
+      - run: sudo ansible-playbook -i sample_hosts micado-master.yml --syntax-check
 
   build:
     machine:
