@@ -12,7 +12,7 @@ jobs:
       - run: sudo apt-get update -qq
       - run: sudo apt-get install -y ansible python3.5
       - run: sudo sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
-      - run: cp sample-hosts hosts && sed -i -e "s/ssh/local/g" -e "s/$/ci=true/" hosts
+      - run: cp sample-hosts hosts && sed -i -e "s/ssh/local/g" -e "s/$/ ci=true/" hosts
       - run: cp sample-security-cred.yml security-cred.yml
       - run: cat hosts
       - run: sudo ansible-playbook -i hosts micado-master.yml
