@@ -12,7 +12,9 @@ jobs:
       - run: sudo apt-add-repository -y ppa:ansible/ansible
       - run: sudo apt-get update -qq
       - run: sudo apt-get install -y ansible
-      - run: sudo ansible-playbook -i sample_hosts micado-master.yml --syntax-check
+      - run: cp sample-hosts hosts && sed -i "s/ssh/local/g" hosts
+      - run: cp sample-security-cred.yml security-cred.yml
+      - run: sudo ansible-playbook -i hosts micado-master.yml --syntax-check
 
   build:
     machine:
