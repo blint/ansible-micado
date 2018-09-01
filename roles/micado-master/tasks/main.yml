@@ -2,6 +2,7 @@
 - include: setup-master-node.yml
 
 - include: docker-install.yml
+  when: not ci
 
 - include: files.yml
 

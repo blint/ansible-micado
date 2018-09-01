@@ -19,6 +19,7 @@
           - "ansible_distribution_version is version('16.04', '==')"
         msg: >
           "The required OS is Ubuntu 16.04"
+      when: not ci
 
   roles:
     - micado-master
