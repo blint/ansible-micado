@@ -5,8 +5,6 @@ jobs:
       docker_layer_caching: false
     steps:
       - checkout
-      - run: pwd
-      - run: ls -al
       - run: sudo apt-get update -qq
       - run: sudo sudo apt-get install -y sshpass software-properties-common python-software-properties
       - run: sudo apt-add-repository -y ppa:ansible/ansible
