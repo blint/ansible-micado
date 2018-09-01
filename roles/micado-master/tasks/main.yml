@@ -7,6 +7,7 @@
 - include: files.yml
 
 - include: worker_node.yml
+  when: not ci
 
 - include: docker-pull-images.yml
 
