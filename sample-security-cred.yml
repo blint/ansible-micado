@@ -9,4 +9,13 @@ authentication:
   # e-mail address defaults to root@micado-master
   email: root@micado-master
   # password defaults to admin
-  password: admin
+  password: admin 
+network:
+  # allowed management IPs/Subnets (IPv4)
+  mgmt_ipv4:
+   - 10.0.1.2
+   - 10.0.2.0/24
+  # allowed management IPs/Subnets (IPv6)
+  mgmt_ipv6:
+   - 0:0:0:0:0:ffff:a00:102
+   - fe80:0:0:0:0:0:a00:200/120

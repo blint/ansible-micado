@@ -22,9 +22,12 @@
 -A FILTERS --protocol icmpv6 --icmpv6-type neighbour-advertisement --jump ACCEPT
 -A FILTERS -m state --state NEW -i lo -j ACCEPT
 
--A FILTERS -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
-#management web interface
--A FILTERS -m state --state NEW -m tcp -p tcp --dport {{ web_listening_port }} -j ACCEPT
+# management web/ssh interface
+{% for item in network.mgmt_ipv6 %}
+-A FILTERS -m state --state NEW -m tcp -p tcp -s {{ item }} --dport 22 -j ACCEPT
+-A FILTERS -m state --state NEW -m tcp -p tcp -s {{ item }} --dport {{ web_listening_port }} -j ACCEPT
+{% endfor %}
+
 #swarm
 -A FILTERS -m state --state NEW -m tcp -p tcp --dport 2377 -j ACCEPT
 -A FILTERS -m state --state NEW -m udp -p udp --dport 4789 -j ACCEPT
